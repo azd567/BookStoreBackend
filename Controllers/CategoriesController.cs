@@ -16,7 +16,7 @@ namespace BookStoreBackend.Controllers
 {
     public class CategoriesController : ApiController
     {
-        private bookstoreDBEntities1 db = new bookstoreDBEntities1();
+        private bookstoreDBEntities db = new bookstoreDBEntities();
 
         // GET: api/Categories
         public IQueryable<Category> GetCategories()

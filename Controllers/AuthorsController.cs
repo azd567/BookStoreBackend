@@ -14,7 +14,7 @@ namespace BookStoreBackend.Controllers
 {
     public class AuthorsController : ApiController
     {
-        private bookstoreDBEntities1 db = new bookstoreDBEntities1();
+        private bookstoreDBEntities db = new bookstoreDBEntities();
 
         // GET: api/Authors
         public IQueryable<Author> GetAuthors()

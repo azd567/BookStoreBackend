@@ -15,10 +15,10 @@ namespace BookStoreBackend.Models
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class bookstoreDBEntities1 : DbContext
+    public partial class bookstoreDBEntities : DbContext
     {
-        public bookstoreDBEntities1()
-            : base("name=bookstoreDBEntities1")
+        public bookstoreDBEntities()
+            : base("name=bookstoreDBEntities")
         {
         }
     

@@ -46,7 +46,7 @@
             <PropertyRef Name="OrderId" />
           </Key>
           <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrderDate" Type="date" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
           <Property Name="CouponId" Type="int" />
           <Property Name="UserId" Type="int" Nullable="false" />
         </EntityType>
@@ -293,7 +293,7 @@
             <PropertyRef Name="OrderId" />
           </Key>
           <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CouponId" Type="Int32" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AppUser" Relationship="Self.FK__BookOrder__UserI__4CA06362" FromRole="BookOrder" ToRole="AppUser" />
@@ -409,7 +409,7 @@
           <End Role="Book" Type="Self.Book" Multiplicity="*" />
           <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="bookstoreDBEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="bookstoreDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AppUsers" EntityType="Self.AppUser" />
           <EntitySet Name="Authors" EntityType="Self.Author" />
           <EntitySet Name="Books" EntityType="Self.Book" />
@@ -463,7 +463,7 @@
         </EntityContainer>
         <ComplexType Name="GetOrdersByUser_Result">
           <Property Type="Int32" Name="OrderId" Nullable="false" />
-          <Property Type="DateTime" Name="OrderDate" Nullable="false" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="23" />
           <Property Type="Int32" Name="CouponId" Nullable="true" />
           <Property Type="Int32" Name="UserId" Nullable="false" />
         </ComplexType>
@@ -487,7 +487,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="bookstoreDBModelStoreContainer" CdmEntityContainer="bookstoreDBEntities1">
+        <EntityContainerMapping StorageEntityContainer="bookstoreDBModelStoreContainer" CdmEntityContainer="bookstoreDBEntities">
           <EntitySetMapping Name="AppUsers">
             <EntityTypeMapping TypeName="bookstoreDBModel.AppUser">
               <MappingFragment StoreEntitySet="AppUser">
