@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="146b8edec1774df0a23d17d70821d7d6" Name="Diagram1">
+        <EntityTypeShape EntityType="bookstoreDBModel.AppUser" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="bookstoreDBModel.Author" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="bookstoreDBModel.Book" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="bookstoreDBModel.BookOrder" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="bookstoreDBModel.Category" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="bookstoreDBModel.Coupon" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="bookstoreDBModel.OrdersBooks" Width="1.5" PointX="9.75" PointY="4" IsExpanded="true" />
+        <AssociationConnector Association="bookstoreDBModel.FK__BookOrder__UserI__4CA06362" ManuallyRouted="false" />
+        <AssociationConnector Association="bookstoreDBModel.FK__Book__AuthorId__4316F928" ManuallyRouted="false" />
+        <AssociationConnector Association="bookstoreDBModel.FK__Book__CategoryId__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="bookstoreDBModel.FK__OrdersBoo__BookI__5070F446" ManuallyRouted="false" />
+        <AssociationConnector Association="bookstoreDBModel.FK__BookOrder__Coupo__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="bookstoreDBModel.FK__OrdersBoo__Order__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="bookstoreDBModel.UsersBooks" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
