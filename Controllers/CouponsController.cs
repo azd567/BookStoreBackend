@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -20,11 +20,11 @@ namespace BookStoreBackend.Controllers
         public IQueryable<CouponDTO> GetCoupons()
         {
             return db.Coupons.Select(
-                Coupon=> new CouponDTO
+                Coupon => new CouponDTO
                 {
-                    CouponId=Coupon.CouponId,
-                    CouponCode=Coupon.CouponCode,
-                    Discount=Coupon.Discount
+                    CouponId = Coupon.CouponId,
+                    CouponCode = Coupon.CouponCode,
+                    Discount = Coupon.Discount
                 }
                 );
         }
@@ -34,7 +34,7 @@ namespace BookStoreBackend.Controllers
         public IHttpActionResult GetCoupon(int id)
         {
             Coupon coupon = db.Coupons.Find(id);
-           // Console.WriteLine(coupon);
+            // Console.WriteLine(coupon);
             if (coupon == null)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace BookStoreBackend.Controllers
             };
             return Ok(cp);
         }
-       
+
         // PUT: api/Coupons/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutCoupon(int id, Coupon coupon)
@@ -97,7 +97,7 @@ namespace BookStoreBackend.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = coupon.CouponId }, coupon);
         }
- // x
+        // x
         // DELETE: api/Coupons/5
         [ResponseType(typeof(Coupon))]
         public IHttpActionResult DeleteCoupon(int id)

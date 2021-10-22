@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -49,7 +49,7 @@ namespace BookStoreBackend.Controllers
             };
             return Ok(bo);
         }
-        
+
 
         // PUT: api/BookOrders/5
         [ResponseType(typeof(void))]
@@ -100,7 +100,7 @@ namespace BookStoreBackend.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = bookOrder.OrderId }, bookOrder);
         }
-//x
+        //x
         // DELETE: api/BookOrders/5
         [ResponseType(typeof(BookOrder))]
         public IHttpActionResult DeleteBookOrder(int id)
