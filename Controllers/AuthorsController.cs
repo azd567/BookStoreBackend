@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using BookStoreBackend.DTOs;
 using BookStoreBackend.Models;
 
 namespace BookStoreBackend.Controllers
@@ -16,17 +16,26 @@ namespace BookStoreBackend.Controllers
     {
         private bookstoreDBEntities db = new bookstoreDBEntities();
 
-        // GET: api/Authors
-        public IQueryable<Author> GetAuthors()
-        {
-            return db.Authors;
+        public IQueryable<AuthorsDTO> GetAuthors() {
+            var Authors = from x in db.Authors
+                          select new AuthorsDTO
+                          {
+                              AuthorId = x.AuthorId,
+                              AuthorName = x.AuthorName
+
+                          };
+            return Authors;
         }
 
-        // GET: api/Authors/5
-        [ResponseType(typeof(Author))]
-        public IHttpActionResult GetAuthor(int id)
+        [ResponseType(typeof(AuthorsDTO))]
+        public IHttpActionResult GetAuthors(int id)
         {
-            Author author = db.Authors.Find(id);
+            var author = db.Authors.Select(
+                authors => new AuthorsDTO()
+                {
+                    AuthorId = authors.AuthorId,
+                    AuthorName = authors.AuthorName
+                }).SingleOrDefault(b => b.AuthorId == id);
             if (author == null)
             {
                 return NotFound();
@@ -35,7 +44,6 @@ namespace BookStoreBackend.Controllers
             return Ok(author);
         }
 
-        // PUT: api/Authors/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutAuthor(int id, Author author)
         {
@@ -131,3 +139,5 @@ namespace BookStoreBackend.Controllers
         }
     }
 }
+
+  

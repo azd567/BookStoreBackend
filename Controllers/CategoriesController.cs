@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using BookStoreBackend.Models;
+using BookStoreBackend.DTOs;
 
 
 
@@ -19,16 +20,39 @@ namespace BookStoreBackend.Controllers
         private bookstoreDBEntities db = new bookstoreDBEntities();
 
         // GET: api/Categories
-        public IQueryable<Category> GetCategories()
+        public IQueryable<CategoryDTO> GetCategories()
         {
-            return db.Categories;
+            var Categories = from item in db.Categories
+                             select new CategoryDTO
+                             {
+                                 CategoryId = item.CategoryId,
+                                 Name = item.Name,
+                                 CreatedAt = item.CreatedAt,
+                                 Description = item.Description,
+                                 Status = item.Status,
+                                 Image = item.Image,
+                                 Position = item.Position
+                             };
+            return Categories;
         }
 
         // GET: api/Categories/5
-        [ResponseType(typeof(Category))]
+        [ResponseType(typeof(CategoryDTO))]
         public IHttpActionResult GetCategory(int id)
         {
-            Category category = db.Categories.Find(id);
+            var category = db.Categories.Select(
+                categories => new CategoryDTO()
+                {
+                    CategoryId = categories.CategoryId,
+                    Name = categories.Name,
+                    CreatedAt = categories.CreatedAt,
+                    Description = categories.Description,
+                    Status = categories.Status,
+                    Image = categories.Image,
+                    Position = categories.Position
+
+                }).SingleOrDefault(b=> b.CategoryId== id);
+                
             if (category == null)
             {
                 return NotFound();
