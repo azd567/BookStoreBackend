@@ -28,12 +28,11 @@ namespace BookStoreBackend.Models
         }
     
         public virtual DbSet<AppUser> AppUsers { get; set; }
-        public virtual DbSet<Author> Authors { get; set; }
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<BookOrder> BookOrders { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
-        public virtual DbSet<OrdersBooks> OrdersBooks1 { get; set; }
+        public virtual DbSet<OrdersBooks> OrdersBooks { get; set; }
     
         public virtual ObjectResult<GetOrdersByUser_Result> GetOrdersByUser(Nullable<int> userId)
         {

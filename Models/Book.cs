@@ -32,10 +32,9 @@ namespace BookStoreBackend.Models
         public int Position { get; set; }
         public int Qty { get; set; }
         public bool Featured { get; set; }
-        public int AuthorId { get; set; }
+        public string AuthorName { get; set; }
         public int CategoryId { get; set; }
     
-        public virtual Author Author { get; set; }
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrdersBooks> OrdersBooks { get; set; }

@@ -24,7 +24,7 @@ namespace BookStoreBackend.Models
         public int Position { get; set; }
         public int Qty { get; set; }
         public bool Featured { get; set; }
-        public int AuthorId { get; set; }
+        public string AuthorName { get; set; }
         public int CategoryId { get; set; }
     }
 }

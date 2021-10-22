@@ -34,7 +34,7 @@ namespace BookStoreBackend.Controllers
                 Position = book.Position,
                 Qty = book.Qty,
                 Featured = book.Featured,
-                Author = book.Author.AuthorName,
+                Author = book.AuthorName,
                 Category = book.Category.Name
             });
         }
@@ -110,7 +110,7 @@ namespace BookStoreBackend.Controllers
             {
                 Title = bk.Title,
                 ISBN = bk.ISBN,
-                AuthorId = bk.AuthorId.Value,
+                AuthorName = bk.Author,
                 CategoryId = bk.CategoryId.Value,
                 Image = bk.Image,
                 Status = bk.Status.Value,

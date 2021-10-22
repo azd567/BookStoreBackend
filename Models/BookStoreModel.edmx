@@ -16,13 +16,6 @@
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
           <Property Name="UserAddress" Type="varchar" MaxLength="100" />
         </EntityType>
-        <EntityType Name="Author">
-          <Key>
-            <PropertyRef Name="AuthorId" />
-          </Key>
-          <Property Name="AuthorId" Type="int" Nullable="false" />
-          <Property Name="AuthorName" Type="varchar" MaxLength="30" Nullable="false" />
-        </EntityType>
         <EntityType Name="Book">
           <Key>
             <PropertyRef Name="BookId" />
@@ -38,7 +31,7 @@
           <Property Name="Position" Type="int" Nullable="false" />
           <Property Name="Qty" Type="int" Nullable="false" />
           <Property Name="Featured" Type="bit" Nullable="false" />
-          <Property Name="AuthorId" Type="int" Nullable="false" />
+          <Property Name="AuthorName" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="BookOrder">
@@ -87,19 +80,7 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="BookId" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Book__AuthorId__4316F928">
-          <End Role="Author" Type="Self.Author" Multiplicity="1" />
-          <End Role="Book" Type="Self.Book" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Author">
-              <PropertyRef Name="AuthorId" />
-            </Principal>
-            <Dependent Role="Book">
-              <PropertyRef Name="AuthorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Book__CategoryId__440B1D61">
+        <Association Name="FK__Book__CategoryId__7A672E12">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="Book" Type="Self.Book" Multiplicity="*" />
           <ReferentialConstraint>
@@ -111,7 +92,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__BookOrder__Coupo__4BAC3F29">
+        <Association Name="FK__BookOrder__Coupo__02084FDA">
           <End Role="Coupon" Type="Self.Coupon" Multiplicity="0..1" />
           <End Role="BookOrder" Type="Self.BookOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -123,7 +104,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__BookOrder__UserI__4CA06362">
+        <Association Name="FK__BookOrder__UserI__02FC7413">
           <End Role="AppUser" Type="Self.AppUser" Multiplicity="1" />
           <End Role="BookOrder" Type="Self.BookOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -135,7 +116,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrdersBoo__BookI__5070F446">
+        <Association Name="FK__OrdersBoo__BookI__06CD04F7">
           <End Role="Book" Type="Self.Book" Multiplicity="1" />
           <End Role="OrdersBooks" Type="Self.OrdersBooks" Multiplicity="*" />
           <ReferentialConstraint>
@@ -147,7 +128,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrdersBoo__Order__4F7CD00D">
+        <Association Name="FK__OrdersBoo__Order__05D8E0BE">
           <End Role="BookOrder" Type="Self.BookOrder" Multiplicity="1" />
           <End Role="OrdersBooks" Type="Self.OrdersBooks" Multiplicity="*" />
           <ReferentialConstraint>
@@ -159,7 +140,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__UsersBook__BookI__5629CD9C">
+        <Association Name="FK__UsersBook__BookI__0C85DE4D">
           <End Role="Book" Type="Self.Book" Multiplicity="1" />
           <End Role="UsersBooks" Type="Self.UsersBooks" Multiplicity="*" />
           <ReferentialConstraint>
@@ -171,7 +152,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__UsersBook__UserI__5535A963">
+        <Association Name="FK__UsersBook__UserI__0B91BA14">
           <End Role="AppUser" Type="Self.AppUser" Multiplicity="1" />
           <End Role="UsersBooks" Type="Self.UsersBooks" Multiplicity="*" />
           <ReferentialConstraint>
@@ -200,42 +181,37 @@
         </Function>
         <EntityContainer Name="bookstoreDBModelStoreContainer">
           <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Author" EntityType="Self.Author" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BookOrder" EntityType="Self.BookOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrdersBooks" EntityType="Self.OrdersBooks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UsersBooks" EntityType="Self.UsersBooks" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Book__AuthorId__4316F928" Association="Self.FK__Book__AuthorId__4316F928">
-            <End Role="Author" EntitySet="Author" />
-            <End Role="Book" EntitySet="Book" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Book__CategoryId__440B1D61" Association="Self.FK__Book__CategoryId__440B1D61">
+          <AssociationSet Name="FK__Book__CategoryId__7A672E12" Association="Self.FK__Book__CategoryId__7A672E12">
             <End Role="Category" EntitySet="Category" />
             <End Role="Book" EntitySet="Book" />
           </AssociationSet>
-          <AssociationSet Name="FK__BookOrder__Coupo__4BAC3F29" Association="Self.FK__BookOrder__Coupo__4BAC3F29">
+          <AssociationSet Name="FK__BookOrder__Coupo__02084FDA" Association="Self.FK__BookOrder__Coupo__02084FDA">
             <End Role="Coupon" EntitySet="Coupon" />
             <End Role="BookOrder" EntitySet="BookOrder" />
           </AssociationSet>
-          <AssociationSet Name="FK__BookOrder__UserI__4CA06362" Association="Self.FK__BookOrder__UserI__4CA06362">
+          <AssociationSet Name="FK__BookOrder__UserI__02FC7413" Association="Self.FK__BookOrder__UserI__02FC7413">
             <End Role="AppUser" EntitySet="AppUser" />
             <End Role="BookOrder" EntitySet="BookOrder" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrdersBoo__BookI__5070F446" Association="Self.FK__OrdersBoo__BookI__5070F446">
+          <AssociationSet Name="FK__OrdersBoo__BookI__06CD04F7" Association="Self.FK__OrdersBoo__BookI__06CD04F7">
             <End Role="Book" EntitySet="Book" />
             <End Role="OrdersBooks" EntitySet="OrdersBooks" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrdersBoo__Order__4F7CD00D" Association="Self.FK__OrdersBoo__Order__4F7CD00D">
+          <AssociationSet Name="FK__OrdersBoo__Order__05D8E0BE" Association="Self.FK__OrdersBoo__Order__05D8E0BE">
             <End Role="BookOrder" EntitySet="BookOrder" />
             <End Role="OrdersBooks" EntitySet="OrdersBooks" />
           </AssociationSet>
-          <AssociationSet Name="FK__UsersBook__BookI__5629CD9C" Association="Self.FK__UsersBook__BookI__5629CD9C">
+          <AssociationSet Name="FK__UsersBook__BookI__0C85DE4D" Association="Self.FK__UsersBook__BookI__0C85DE4D">
             <End Role="Book" EntitySet="Book" />
             <End Role="UsersBooks" EntitySet="UsersBooks" />
           </AssociationSet>
-          <AssociationSet Name="FK__UsersBook__UserI__5535A963" Association="Self.FK__UsersBook__UserI__5535A963">
+          <AssociationSet Name="FK__UsersBook__UserI__0B91BA14" Association="Self.FK__UsersBook__UserI__0B91BA14">
             <End Role="AppUser" EntitySet="AppUser" />
             <End Role="UsersBooks" EntitySet="UsersBooks" />
           </AssociationSet>
@@ -255,16 +231,8 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
           <Property Name="UserAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="BookOrders" Relationship="Self.FK__BookOrder__UserI__4CA06362" FromRole="AppUser" ToRole="BookOrder" />
+          <NavigationProperty Name="BookOrders" Relationship="Self.FK__BookOrder__UserI__02FC7413" FromRole="AppUser" ToRole="BookOrder" />
           <NavigationProperty Name="Books" Relationship="Self.UsersBooks" FromRole="AppUser" ToRole="Book" />
-        </EntityType>
-        <EntityType Name="Author">
-          <Key>
-            <PropertyRef Name="AuthorId" />
-          </Key>
-          <Property Name="AuthorId" Type="Int32" Nullable="false" />
-          <Property Name="AuthorName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Books" Relationship="Self.FK__Book__AuthorId__4316F928" FromRole="Author" ToRole="Book" />
         </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -281,11 +249,10 @@
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
           <Property Name="Featured" Type="Boolean" Nullable="false" />
-          <Property Name="AuthorId" Type="Int32" Nullable="false" />
+          <Property Name="AuthorName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Author" Relationship="Self.FK__Book__AuthorId__4316F928" FromRole="Book" ToRole="Author" />
-          <NavigationProperty Name="Category" Relationship="Self.FK__Book__CategoryId__440B1D61" FromRole="Book" ToRole="Category" />
-          <NavigationProperty Name="OrdersBooks" Relationship="Self.FK__OrdersBoo__BookI__5070F446" FromRole="Book" ToRole="OrdersBooks" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Book__CategoryId__7A672E12" FromRole="Book" ToRole="Category" />
+          <NavigationProperty Name="OrdersBooks" Relationship="Self.FK__OrdersBoo__BookI__06CD04F7" FromRole="Book" ToRole="OrdersBooks" />
           <NavigationProperty Name="AppUsers" Relationship="Self.UsersBooks" FromRole="Book" ToRole="AppUser" />
         </EntityType>
         <EntityType Name="BookOrder">
@@ -296,9 +263,9 @@
           <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CouponId" Type="Int32" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="AppUser" Relationship="Self.FK__BookOrder__UserI__4CA06362" FromRole="BookOrder" ToRole="AppUser" />
-          <NavigationProperty Name="Coupon" Relationship="Self.FK__BookOrder__Coupo__4BAC3F29" FromRole="BookOrder" ToRole="Coupon" />
-          <NavigationProperty Name="OrdersBooks" Relationship="Self.FK__OrdersBoo__Order__4F7CD00D" FromRole="BookOrder" ToRole="OrdersBooks" />
+          <NavigationProperty Name="AppUser" Relationship="Self.FK__BookOrder__UserI__02FC7413" FromRole="BookOrder" ToRole="AppUser" />
+          <NavigationProperty Name="Coupon" Relationship="Self.FK__BookOrder__Coupo__02084FDA" FromRole="BookOrder" ToRole="Coupon" />
+          <NavigationProperty Name="OrdersBooks" Relationship="Self.FK__OrdersBoo__Order__05D8E0BE" FromRole="BookOrder" ToRole="OrdersBooks" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -311,7 +278,7 @@
           <Property Name="Status" Type="Boolean" Nullable="false" />
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Books" Relationship="Self.FK__Book__CategoryId__440B1D61" FromRole="Category" ToRole="Book" />
+          <NavigationProperty Name="Books" Relationship="Self.FK__Book__CategoryId__7A672E12" FromRole="Category" ToRole="Book" />
         </EntityType>
         <EntityType Name="Coupon">
           <Key>
@@ -320,7 +287,7 @@
           <Property Name="CouponId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CouponCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Discount" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="BookOrders" Relationship="Self.FK__BookOrder__Coupo__4BAC3F29" FromRole="Coupon" ToRole="BookOrder" />
+          <NavigationProperty Name="BookOrders" Relationship="Self.FK__BookOrder__Coupo__02084FDA" FromRole="Coupon" ToRole="BookOrder" />
         </EntityType>
         <EntityType Name="OrdersBooks">
           <Key>
@@ -330,10 +297,10 @@
           <Property Name="OrderId" Type="Int32" Nullable="false" />
           <Property Name="BookId" Type="Int32" Nullable="false" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Book" Relationship="Self.FK__OrdersBoo__BookI__5070F446" FromRole="OrdersBooks" ToRole="Book" />
-          <NavigationProperty Name="BookOrder" Relationship="Self.FK__OrdersBoo__Order__4F7CD00D" FromRole="OrdersBooks" ToRole="BookOrder" />
+          <NavigationProperty Name="Book" Relationship="Self.FK__OrdersBoo__BookI__06CD04F7" FromRole="OrdersBooks" ToRole="Book" />
+          <NavigationProperty Name="BookOrder" Relationship="Self.FK__OrdersBoo__Order__05D8E0BE" FromRole="OrdersBooks" ToRole="BookOrder" />
         </EntityType>
-        <Association Name="FK__BookOrder__UserI__4CA06362">
+        <Association Name="FK__BookOrder__UserI__02FC7413">
           <End Role="AppUser" Type="Self.AppUser" Multiplicity="1" />
           <End Role="BookOrder" Type="Self.BookOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -345,19 +312,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Book__AuthorId__4316F928">
-          <End Role="Author" Type="Self.Author" Multiplicity="1" />
-          <End Role="Book" Type="Self.Book" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Author">
-              <PropertyRef Name="AuthorId" />
-            </Principal>
-            <Dependent Role="Book">
-              <PropertyRef Name="AuthorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Book__CategoryId__440B1D61">
+        <Association Name="FK__Book__CategoryId__7A672E12">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="Book" Type="Self.Book" Multiplicity="*" />
           <ReferentialConstraint>
@@ -369,7 +324,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrdersBoo__BookI__5070F446">
+        <Association Name="FK__OrdersBoo__BookI__06CD04F7">
           <End Role="Book" Type="Self.Book" Multiplicity="1" />
           <End Role="OrdersBooks" Type="bookstoreDBModel.OrdersBooks" Multiplicity="*" />
           <ReferentialConstraint>
@@ -381,7 +336,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__BookOrder__Coupo__4BAC3F29">
+        <Association Name="FK__BookOrder__Coupo__02084FDA">
           <End Role="Coupon" Type="Self.Coupon" Multiplicity="0..1" />
           <End Role="BookOrder" Type="Self.BookOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -393,7 +348,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrdersBoo__Order__4F7CD00D">
+        <Association Name="FK__OrdersBoo__Order__05D8E0BE">
           <End Role="BookOrder" Type="Self.BookOrder" Multiplicity="1" />
           <End Role="OrdersBooks" Type="bookstoreDBModel.OrdersBooks" Multiplicity="*" />
           <ReferentialConstraint>
@@ -411,35 +366,30 @@
         </Association>
         <EntityContainer Name="bookstoreDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AppUsers" EntityType="Self.AppUser" />
-          <EntitySet Name="Authors" EntityType="Self.Author" />
           <EntitySet Name="Books" EntityType="Self.Book" />
           <EntitySet Name="BookOrders" EntityType="Self.BookOrder" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Coupons" EntityType="Self.Coupon" />
-          <EntitySet Name="OrdersBooks1" EntityType="bookstoreDBModel.OrdersBooks" />
-          <AssociationSet Name="FK__BookOrder__UserI__4CA06362" Association="Self.FK__BookOrder__UserI__4CA06362">
+          <EntitySet Name="OrdersBooks" EntityType="bookstoreDBModel.OrdersBooks" />
+          <AssociationSet Name="FK__BookOrder__UserI__02FC7413" Association="Self.FK__BookOrder__UserI__02FC7413">
             <End Role="AppUser" EntitySet="AppUsers" />
             <End Role="BookOrder" EntitySet="BookOrders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Book__AuthorId__4316F928" Association="Self.FK__Book__AuthorId__4316F928">
-            <End Role="Author" EntitySet="Authors" />
-            <End Role="Book" EntitySet="Books" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Book__CategoryId__440B1D61" Association="Self.FK__Book__CategoryId__440B1D61">
+          <AssociationSet Name="FK__Book__CategoryId__7A672E12" Association="Self.FK__Book__CategoryId__7A672E12">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Book" EntitySet="Books" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrdersBoo__BookI__5070F446" Association="Self.FK__OrdersBoo__BookI__5070F446">
+          <AssociationSet Name="FK__OrdersBoo__BookI__06CD04F7" Association="Self.FK__OrdersBoo__BookI__06CD04F7">
             <End Role="Book" EntitySet="Books" />
-            <End Role="OrdersBooks" EntitySet="OrdersBooks1" />
+            <End Role="OrdersBooks" EntitySet="OrdersBooks" />
           </AssociationSet>
-          <AssociationSet Name="FK__BookOrder__Coupo__4BAC3F29" Association="Self.FK__BookOrder__Coupo__4BAC3F29">
+          <AssociationSet Name="FK__BookOrder__Coupo__02084FDA" Association="Self.FK__BookOrder__Coupo__02084FDA">
             <End Role="Coupon" EntitySet="Coupons" />
             <End Role="BookOrder" EntitySet="BookOrders" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrdersBoo__Order__4F7CD00D" Association="Self.FK__OrdersBoo__Order__4F7CD00D">
+          <AssociationSet Name="FK__OrdersBoo__Order__05D8E0BE" Association="Self.FK__OrdersBoo__Order__05D8E0BE">
             <End Role="BookOrder" EntitySet="BookOrders" />
-            <End Role="OrdersBooks" EntitySet="OrdersBooks1" />
+            <End Role="OrdersBooks" EntitySet="OrdersBooks" />
           </AssociationSet>
           <AssociationSet Name="UsersBooks" Association="Self.UsersBooks">
             <End Role="Book" EntitySet="Books" />
@@ -479,7 +429,7 @@
           <Property Type="Int32" Name="Position" Nullable="false" />
           <Property Type="Int32" Name="Qty" Nullable="false" />
           <Property Type="Boolean" Name="Featured" Nullable="false" />
-          <Property Type="Int32" Name="AuthorId" Nullable="false" />
+          <Property Type="String" Name="AuthorName" Nullable="false" MaxLength="30" />
           <Property Type="Int32" Name="CategoryId" Nullable="false" />
         </ComplexType>
       </Schema>
@@ -500,14 +450,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Authors">
-            <EntityTypeMapping TypeName="bookstoreDBModel.Author">
-              <MappingFragment StoreEntitySet="Author">
-                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
-                <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Books">
             <EntityTypeMapping TypeName="bookstoreDBModel.Book">
               <MappingFragment StoreEntitySet="Book">
@@ -522,7 +464,7 @@
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="Featured" ColumnName="Featured" />
-                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -559,7 +501,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrdersBooks1">
+          <EntitySetMapping Name="OrdersBooks">
             <EntityTypeMapping TypeName="bookstoreDBModel.OrdersBooks">
               <MappingFragment StoreEntitySet="OrdersBooks">
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
@@ -600,7 +542,7 @@
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="Featured" ColumnName="Featured" />
-                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
               </ComplexTypeMapping>
             </ResultMapping>

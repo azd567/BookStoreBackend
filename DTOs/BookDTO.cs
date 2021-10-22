@@ -34,8 +34,6 @@ namespace BookStoreBackend.DTOs
 
         public string Category { get; set; }
 
-        public Nullable<int> AuthorId { get; set; }
-
         public Nullable<int> CategoryId { get; set; }
 
         public BookDTO()
@@ -54,7 +52,7 @@ namespace BookStoreBackend.DTOs
             Position = book.Position;
             Qty = book.Qty;
             Featured = book.Featured;
-            Author = book.Author.AuthorName;
+            Author = book.AuthorName;
             Category = book.Category.Name;
         }
     }

@@ -162,7 +162,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\AuthorsController.cs" />
     <Compile Include="Controllers\BookOrdersController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\AppUsersController.cs" />
@@ -173,15 +172,11 @@
     <Compile Include="DTOs\BookOrderDTO.cs" />
     <Compile Include="DTOs\CouponDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
-    <Compile Include="DTOs\AuthorsDTO.cs" />
     <Compile Include="DTOs\CategoryDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppUser.cs">
-      <DependentUpon>BookStoreModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Author.cs">
       <DependentUpon>BookStoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Book.cs">
@@ -196,13 +191,13 @@
       <DependentUpon>BookStoreModel.Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BookStoreModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>BookStoreModel.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\BookStoreModel.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>BookStoreModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Category.cs">
@@ -236,10 +231,13 @@
       <DependentUpon>BookStoreModel.edmx</DependentUpon>
       <LastGenOutput>BookStoreModel.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="Models\BookStoreModel.edmx.diagram">
+      <DependentUpon>BookStoreModel.edmx</DependentUpon>
+    </Content>
     <Content Include="Models\BookStoreModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BookStoreModel.edmx</DependentUpon>
       <LastGenOutput>BookStoreModel.cs</LastGenOutput>
+      <DependentUpon>BookStoreModel.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -266,9 +264,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>BookStoreModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\BookStoreModel.edmx.diagram">
-      <DependentUpon>BookStoreModel.edmx</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
