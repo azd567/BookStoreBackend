@@ -21,9 +21,7 @@ namespace BookStoreBackend.DTOs
         public string Password { get; set; }
 
         public UserDTO()
-        {
-            Password = "";
-        }
+        {}
 
         public UserDTO(AppUser appUser)
         {
@@ -32,7 +30,18 @@ namespace BookStoreBackend.DTOs
             Address = appUser.UserAddress;
             IsActive = appUser.IsActive;
             IsAdmin = appUser.IsAdmin;
-            Password = "";
+        }
+
+        static public IQueryable<UserDTO> SerializeUserList(IQueryable<AppUser> userList)
+        {
+            return userList.Select(User => new UserDTO
+            {
+                Id = User.UserId,
+                Name = User.UserName,
+                Address = User.UserAddress,
+                IsActive = User.IsActive,
+                IsAdmin = User.IsAdmin
+            });
         }
     }
 }

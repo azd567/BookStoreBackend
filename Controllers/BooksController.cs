@@ -21,22 +21,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/Books
         public IQueryable<BookDTO> GetBooks()
         {
-            return db.Books.Select(book => new BookDTO
-            {
-                BookId = book.BookId,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                Year = book.Year,
-                Description = book.Description,
-                Status = book.Status,
-                Image = book.Image,
-                Price = book.Price,
-                Position = book.Position,
-                Qty = book.Qty,
-                Featured = book.Featured,
-                Author = book.AuthorName,
-                Category = book.Category.Name
-            });
+            return BookDTO.SerializeBookList(db.Books.Where(book => book.Status));
         }
 
         // GET: api/Books/5
@@ -98,7 +83,6 @@ namespace BookStoreBackend.Controllers
         }
 
         // POST: api/Books
-        [ResponseType(typeof(BookDTO))]
         public async Task<IHttpActionResult> PostBook(BookDTO bk)
         {
             if (!ModelState.IsValid)
@@ -133,7 +117,7 @@ namespace BookStoreBackend.Controllers
                 throw new Exception(e.Message);
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = book.BookId }, bk);
+            return CreatedAtRoute("DefaultApi", new { id = book.BookId }, book.BookId);
         }
 
         // DELETE: api/Books/5

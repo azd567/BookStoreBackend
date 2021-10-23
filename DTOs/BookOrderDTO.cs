@@ -13,4 +13,19 @@ namespace BookStoreBackend.DTOs
         public int UserId { get; set; }
 
     }
+
+    public class BookQuantity
+    {
+        public int? BookId { get; set; }
+        public int? Qty { get; set; }
+    }
+       
+
+    public class BookListOrderDTO
+    {
+        public System.DateTime OrderDate { get; set; }
+        public int? CouponId { get; set; }
+        public int? UserId { get; set; }
+        public ICollection<BookQuantity> BookList { get; set; }
+    }
 }

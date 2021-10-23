@@ -11,6 +11,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using BookStoreBackend.Models;
 using BookStoreBackend.DTOs;
+using BookStoreBackend.Interfaces;
+using System.Web.Helpers;
 
 namespace BookStoreBackend.Controllers
 {
@@ -19,16 +21,17 @@ namespace BookStoreBackend.Controllers
     {
         private bookstoreDBEntities db = new bookstoreDBEntities();
 
+        private readonly ITokenService _tokenService;
+
+        public AppUsersController(ITokenService tokenService)
+        {
+            this._tokenService = tokenService;
+        }
+
         // GET: api/AppUsers
         public IQueryable<UserDTO> GetAppUsers()
         {
-            return db.AppUsers.Select(
-                User => new UserDTO { 
-                Id=User.UserId, 
-                Name = User.UserName, 
-                Address = User.UserAddress,
-                IsActive=User.IsActive, 
-                IsAdmin= User.IsAdmin });
+            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.IsActive));
         }
 
         // GET: api/AppUsers/5
@@ -84,26 +87,61 @@ namespace BookStoreBackend.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/AppUsers
-        [ResponseType(typeof(UserDTO))]
-        public async Task<IHttpActionResult> PostAppUser(UserDTO user)
+        // POST : api/AppUsers/Login
+        [Route("login", Name = "LoginAppUserApi")]
+        public IHttpActionResult LoginAppUser(UserDTO user)
+        {
+            if (user.Name == null)
+                return BadRequest("No User name provided");
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var appUser = db.AppUsers.Where(appuser => appuser.UserName == user.Name).FirstOrDefault();
+
+            if (appUser == null)
+                return BadRequest("No User exists with the provided name");
+
+            try
+            {
+                if (!Crypto.VerifyHashedPassword(appUser.UserPassword, user.Password))
+                    return BadRequest("Invalid Credentials");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return CreatedAtRoute("LoginAppUserApi", new { id = appUser.UserId }, this._tokenService.CreateToken(appUser.UserId, appUser.UserName, appUser.IsAdmin));
+        }
+
+        // POST: api/AppUsers/Register
+        [Route("register", Name = "RegisterAppUserApi")]
+        public async Task<IHttpActionResult> RegisterAppUser(UserDTO user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-           
-            AppUser appUser = new AppUser
-            {
-                UserName = user.Name,
-                UserAddress = user.Address,
-                UserPassword = System.Web.Helpers.Crypto.SHA1(user.Password),
-                IsActive = user.IsActive.Value,
-                IsAdmin = user.IsAdmin.Value
-            };
+
+            if (user.Name == null || user.IsActive == null || user.IsAdmin == null || user.Password == null)
+                return BadRequest("All required fields are not provided");
+
+            if ((await db.AppUsers.AnyAsync(appuser => appuser.UserName == user.Name)))
+                return BadRequest("Given User name already exists");
+
+            AppUser appUser = new AppUser();
 
             try
             {
+                appUser.UserName = user.Name;
+                appUser.UserAddress = user.Address;
+                appUser.UserPassword = Crypto.HashPassword(user.Password);
+                appUser.IsActive = user.IsActive.Value;
+                appUser.IsAdmin = user.IsAdmin.Value;
+
                 db.AppUsers.Add(appUser);
                 await db.SaveChangesAsync();
             }
@@ -112,7 +150,7 @@ namespace BookStoreBackend.Controllers
                 throw new Exception(e.Message);
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = appUser.UserId }, user);
+            return CreatedAtRoute("RegisterAppUserApi", new { id = appUser.UserId }, this._tokenService.CreateToken(appUser.UserId, appUser.UserName, appUser.IsAdmin));
         }
 
         // DELETE: api/AppUsers/5
@@ -221,6 +259,55 @@ namespace BookStoreBackend.Controllers
 
             return Ok();
         }
+
+
+        // GET: api/AppUsers/Orders?id={id}
+        [Route("orders")]
+        [HttpGet]
+        public async Task<IQueryable<dynamic>> GetOrders(int id)
+        {
+            AppUser appUser = await db.AppUsers.FindAsync(id);
+            if (appUser == null)
+            {
+                return null;
+            }
+
+            return appUser.BookOrders.Select(order => new { OrderId = order.OrderId, OrderDate = order.OrderDate }).AsQueryable(); ;
+        }
+
+        // DELETE THIS WHEN NO LONGER REQUIRED
+        // **********************************************
+
+        //[Route("test")]
+        //[HttpGet]
+        //public async Task<dynamic> Gettest(int id)
+        //{
+        //    AppUser appUser = await db.AppUsers.FindAsync(id);
+        //    if (appUser == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    return this._tokenService.CreateToken(appUser.UserId, appUser.UserName, appUser.IsAdmin);
+        //}
+
+        //[Route("test2")]
+        //[HttpGet]
+        //[Authorize]
+        //public string Gettest2()
+        //{
+        //    return "User allowed";
+        //}
+
+        //[Route("test3")]
+        //[HttpGet]
+        //[Authorize(Roles = "Admin")]
+        //public string Gettest3()
+        //{
+        //    return "Admin allowed";
+        //}
+
+        // *************************************************
 
         protected override void Dispose(bool disposing)
         {

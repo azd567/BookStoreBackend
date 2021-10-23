@@ -1,6 +1,7 @@
 ﻿using BookStoreBackend.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -54,6 +55,26 @@ namespace BookStoreBackend.DTOs
             Featured = book.Featured;
             Author = book.AuthorName;
             Category = book.Category.Name;
+        }
+
+        static public IQueryable<BookDTO> SerializeBookList(IQueryable<Book> bookList)
+        {
+            return bookList.Select(book => new BookDTO
+            {
+                BookId = book.BookId,
+                Title = book.Title,
+                ISBN = book.ISBN,
+                Year = book.Year,
+                Description = book.Description,
+                Status = book.Status,
+                Image = book.Image,
+                Price = book.Price,
+                Position = book.Position,
+                Qty = book.Qty,
+                Featured = book.Featured,
+                Author = book.AuthorName,
+                Category = book.Category.Name
+            });
         }
     }
 }
