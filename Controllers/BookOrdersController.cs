@@ -187,22 +187,22 @@ namespace BookStoreBackend.Controllers
             return CreatedAtRoute("DefaultApi", new { id = bookOrder.OrderId }, bookOrder.OrderId);
         }
 
-        // POST: api/BookOrders/OrderDetails?id={id}
+        // GET: api/BookOrders/OrderDetails?id={id}
         [Route("orderdetails")]
         [HttpGet]
-        public async Task<dynamic> GetOrderDetails(int id)
+        public async Task<IHttpActionResult> GetOrderDetails(int id)
         {
             BookOrder order = await db.BookOrders.FindAsync(id);
             if (order == null)
             {
-                return null;
+                return NotFound();
             }
 
-            return new {
+            return Ok(new {
                 order.OrderDate,
                 CouponCode = order.Coupon == null ? "null" : order.Coupon.CouponCode,
                 BookList = order.OrdersBooks.Select(books => new { book = new BookDTO(books.Book), qty = books.Qty })
-            }; 
+            }); 
         }
 
         protected override void Dispose(bool disposing)

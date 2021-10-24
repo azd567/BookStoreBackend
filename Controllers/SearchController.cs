@@ -21,8 +21,7 @@ namespace BookStoreBackend.Controllers
         [HttpGet]
         public IQueryable<BookDTO> GetBooksByCategory(string name)
         {
-            return BookDTO.SerializeBookList(db.Books.Where(book => book.Category.Name.Contains(name) && book.Status));
-                    
+            return BookDTO.SerializeBookList(db.Books.Where(book => book.Category.Name.Contains(name) && book.Status));      
         }
 
         // GET: api/Search/Author
@@ -31,7 +30,6 @@ namespace BookStoreBackend.Controllers
         public IQueryable<BookDTO> GetBooksByAuthor(string name)
         {
             return BookDTO.SerializeBookList(db.Books.Where(book => book.AuthorName.Contains(name) && book.Status));
-
         }
 
         // GET: api/Search/Title
@@ -40,7 +38,6 @@ namespace BookStoreBackend.Controllers
         public IQueryable<BookDTO> GetBooksByTitle(string name)
         {
             return BookDTO.SerializeBookList(db.Books.Where(book => book.Title.Contains(name) && book.Status));
-
         }
 
         // GET: api/Search/ISBN
@@ -49,7 +46,13 @@ namespace BookStoreBackend.Controllers
         public IQueryable<BookDTO> GetBooksByISBN(string number)
         {
             return BookDTO.SerializeBookList(db.Books.Where(book => book.ISBN.Contains(number) && book.Status));
+        }
 
+        [Route("user")]
+        [HttpGet]
+        public IQueryable<UserDTO> GetUsersByName(string name)
+        {
+            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.UserName.Contains(name) && user.IsAdmin == false));
         }
 
         protected override void Dispose(bool disposing)

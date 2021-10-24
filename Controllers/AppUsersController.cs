@@ -31,7 +31,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/AppUsers
         public IQueryable<UserDTO> GetAppUsers()
         {
-            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.IsActive));
+            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.IsAdmin == false));
         }
 
         // GET: api/AppUsers/5
@@ -106,8 +106,11 @@ namespace BookStoreBackend.Controllers
 
             try
             {
+                if (!appUser.IsActive)
+                    return BadRequest("User account is deactivated by Admin");
+
                 if (!Crypto.VerifyHashedPassword(appUser.UserPassword, user.Password))
-                    return BadRequest("Invalid Credentials");
+                    return BadRequest("Invalid Credentials"); 
             }
             catch (Exception e)
             {
@@ -180,15 +183,15 @@ namespace BookStoreBackend.Controllers
         // GET: api/AppUsers/WishList?id={id}
         [Route("wishlist")]
         [HttpGet]
-        public async Task<IQueryable<BookDTO>> GetWishList(int id)
+        public async Task<IHttpActionResult> GetWishList(int id)
         {
             AppUser appUser = await db.AppUsers.FindAsync(id);
             if (appUser == null)
             {
-                return null;
+                return NotFound();
             }
 
-            return appUser.Books.Select(book => new BookDTO(book)).AsQueryable(); ;
+            return Ok(appUser.Books.Select(book => new BookDTO(book)).AsQueryable());
         }
 
         // PUT: api/AppUsers/WishList?UserId={UserId}&BookId={BookId}
@@ -264,15 +267,15 @@ namespace BookStoreBackend.Controllers
         // GET: api/AppUsers/Orders?id={id}
         [Route("orders")]
         [HttpGet]
-        public async Task<IQueryable<dynamic>> GetOrders(int id)
+        public async Task<IHttpActionResult> GetOrders(int id)
         {
             AppUser appUser = await db.AppUsers.FindAsync(id);
             if (appUser == null)
             {
-                return null;
+                return NotFound();
             }
 
-            return appUser.BookOrders.Select(order => new { OrderId = order.OrderId, OrderDate = order.OrderDate }).AsQueryable(); ;
+            return Ok(appUser.BookOrders.Select(order => new { order.OrderId, order.OrderDate }).AsQueryable());
         }
 
         // DELETE THIS WHEN NO LONGER REQUIRED
