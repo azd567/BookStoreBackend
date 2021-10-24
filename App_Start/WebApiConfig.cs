@@ -21,7 +21,10 @@ namespace BookStoreBackend
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             var container = new UnityContainer();
+
             container.RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ILoggerService, APILogger>(new ContainerControlledLifetimeManager());
+
             config.DependencyResolver = new UnityDependencyResolver(container);
 
             // Web API routes

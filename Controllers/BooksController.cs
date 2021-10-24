@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using BookStoreBackend.DTOs;
+using BookStoreBackend.Interfaces;
 using BookStoreBackend.Models;
 
 namespace BookStoreBackend.Controllers
@@ -17,6 +18,12 @@ namespace BookStoreBackend.Controllers
     public class BooksController : ApiController
     {
         private bookstoreDBEntities db = new bookstoreDBEntities();
+        private readonly ILoggerService _logger;
+
+        public BooksController(ILoggerService logger)
+        {
+            this._logger = logger;
+        }
 
         // GET: api/Books
         public IQueryable<BookDTO> GetBooks()
@@ -41,6 +48,8 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutBook(BookDTO bk)
         {
+            this._logger.Info("Started HTTP PUT Request for Updating Book Details");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -56,28 +65,30 @@ namespace BookStoreBackend.Controllers
                 return NotFound();
             }
 
-            Book book = await db.Books.FindAsync(bk.BookId.Value);
-
-            book.Title = bk.Title ?? book.Title;
-            book.Featured = bk.Featured ?? book.Featured;
-            book.Description = bk.Description ?? book.Description;
-            book.Image = bk.Image ?? book.Image;
-            book.Status = bk.Status ?? book.Status;
-            book.Qty = bk.Qty ?? book.Qty;
-            book.Price = bk.Price ?? book.Price;
-            book.Position = bk.Position ?? book.Position;
-
-
-            db.Entry(book).State = EntityState.Modified;
-
             try
             {
+                Book book = await db.Books.FindAsync(bk.BookId.Value);
+
+                book.Title = bk.Title ?? book.Title;
+                book.Featured = bk.Featured ?? book.Featured;
+                book.Description = bk.Description ?? book.Description;
+                book.Image = bk.Image ?? book.Image;
+                book.Status = bk.Status ?? book.Status;
+                book.Qty = bk.Qty ?? book.Qty;
+                book.Price = bk.Price ?? book.Price;
+                book.Position = bk.Position ?? book.Position;
+
+                db.Entry(book).State = EntityState.Modified;
+
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                throw;
+                this._logger.Error("Exception in BooksController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP PUT Request for Updating Book Details");
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -85,6 +96,8 @@ namespace BookStoreBackend.Controllers
         // POST: api/Books
         public async Task<IHttpActionResult> PostBook(BookDTO bk)
         {
+            this._logger.Info("Started HTTP POST Request for Adding Book");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -114,8 +127,11 @@ namespace BookStoreBackend.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                this._logger.Error("Exception in BooksController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success HTTP POST Request for Adding Book");
 
             return CreatedAtRoute("DefaultApi", new { id = book.BookId }, book.BookId);
         }
@@ -124,14 +140,26 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(Book))]
         public async Task<IHttpActionResult> DeleteBook(int id)
         {
+            this._logger.Info("Started HTTP DELETE Request for deleting Book");
+
             Book book = await db.Books.FindAsync(id);
             if (book == null)
             {
                 return NotFound();
             }
 
-            db.Books.Remove(book);
-            await db.SaveChangesAsync();
+            try
+            {
+                db.Books.Remove(book);
+                await db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                this._logger.Error("Exception in BooksController : " + e.Message);
+                return InternalServerError(e);
+            }
+
+            this._logger.Info("Success in HTTP DELETE Request for deleting Book");
 
             return Ok(book);
         }

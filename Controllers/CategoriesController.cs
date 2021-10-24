@@ -10,14 +10,19 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using BookStoreBackend.Models;
 using BookStoreBackend.DTOs;
-
-
+using BookStoreBackend.Interfaces;
 
 namespace BookStoreBackend.Controllers
 {
     public class CategoriesController : ApiController
     {
         private bookstoreDBEntities db = new bookstoreDBEntities();
+        private readonly ILoggerService _logger;
+
+        public CategoriesController(ILoggerService logger)
+        {
+            this._logger = logger;
+        }
 
         // GET: api/Categories
         public IQueryable<CategoryDTO> GetCategories()
@@ -65,6 +70,8 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutCategory(int id, Category category)
         {
+            this._logger.Info("Started HTTP PUT Request for Updating Category");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -75,23 +82,24 @@ namespace BookStoreBackend.Controllers
                 return BadRequest();
             }
 
-            db.Entry(category).State = EntityState.Modified;
+            if (!CategoryExists(id))
+            {
+                return NotFound();
+            }
 
             try
             {
+                db.Entry(category).State = EntityState.Modified;
+            
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                this._logger.Error("Exception in CategoriesController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP PUT Request for Updating Category");
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -100,13 +108,25 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(Category))]
         public IHttpActionResult PostCategory(Category category)
         {
+            this._logger.Info("Started HTTP POST Request for Adding Category");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Categories.Add(category);
-            db.SaveChanges();
+            try
+            {
+                db.Categories.Add(category);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                this._logger.Error("Exception in CategoriesController : " + e.Message);
+                return InternalServerError(e);
+            }
+
+            this._logger.Info("Success in HTTP POST Request for Adding Category");
 
             return CreatedAtRoute("DefaultApi", new { id = category.CategoryId }, category);
         }
@@ -115,14 +135,26 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(Category))]
         public IHttpActionResult DeleteCategory(int id)
         {
+            this._logger.Info("Started HTTP DELETE  Request for Deleting Category");
+
             Category category = db.Categories.Find(id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            db.Categories.Remove(category);
-            db.SaveChanges();
+            try
+            {
+                db.Categories.Remove(category);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                this._logger.Error("Exception in CategoriesController : " + e.Message);
+                return InternalServerError(e);
+            }
+
+            this._logger.Info("Success in HTTP DELETE  Request for Deleting Category");
 
             return Ok(category);
         }

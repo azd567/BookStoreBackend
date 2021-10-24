@@ -13,6 +13,7 @@ using BookStoreBackend.Models;
 using BookStoreBackend.DTOs;
 using BookStoreBackend.Interfaces;
 using System.Web.Helpers;
+using NLog;
 
 namespace BookStoreBackend.Controllers
 {
@@ -21,11 +22,14 @@ namespace BookStoreBackend.Controllers
     {
         private bookstoreDBEntities db = new bookstoreDBEntities();
 
+        private readonly ILoggerService _logger;
+
         private readonly ITokenService _tokenService;
 
-        public AppUsersController(ITokenService tokenService)
+        public AppUsersController(ITokenService tokenService, ILoggerService logger)
         {
             this._tokenService = tokenService;
+            this._logger = logger;
         }
 
         // GET: api/AppUsers
@@ -51,6 +55,9 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutAppUser(UserDTO user)
         {
+
+            this._logger.Info("Started HTTP PUT Request for updating User details");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -66,23 +73,26 @@ namespace BookStoreBackend.Controllers
                 return NotFound();
             }
 
-            AppUser appUser = await db.AppUsers.FindAsync(user.Id.Value);
-
-            appUser.IsAdmin = user.IsAdmin ?? appUser.IsAdmin;
-            appUser.UserName = user.Name ?? appUser.UserName;
-            appUser.UserAddress = user.Address ?? appUser.UserAddress;
-            appUser.IsActive = user.IsActive ?? appUser.IsActive;
-
-            db.Entry(appUser).State = EntityState.Modified;
-
             try
             {
+                AppUser appUser = await db.AppUsers.FindAsync(user.Id.Value);
+
+                appUser.IsAdmin = user.IsAdmin ?? appUser.IsAdmin;
+                appUser.UserName = user.Name ?? appUser.UserName;
+                appUser.UserAddress = user.Address ?? appUser.UserAddress;
+                appUser.IsActive = user.IsActive ?? appUser.IsActive;
+
+                db.Entry(appUser).State = EntityState.Modified;
+            
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                throw;
+                this._logger.Error("Exception in AppUserController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP PUT Request for updating User details");
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -91,6 +101,8 @@ namespace BookStoreBackend.Controllers
         [Route("login", Name = "LoginAppUserApi")]
         public IHttpActionResult LoginAppUser(UserDTO user)
         {
+            this._logger.Info("Started HTTP POST Request for User login");
+
             if (user.Name == null)
                 return BadRequest("No User name provided");
 
@@ -114,8 +126,11 @@ namespace BookStoreBackend.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                this._logger.Error("Exception in AppUserController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP POST Request for User login");
 
             return CreatedAtRoute("LoginAppUserApi", new { id = appUser.UserId }, this._tokenService.CreateToken(appUser.UserId, appUser.UserName, appUser.IsAdmin));
         }
@@ -124,6 +139,8 @@ namespace BookStoreBackend.Controllers
         [Route("register", Name = "RegisterAppUserApi")]
         public async Task<IHttpActionResult> RegisterAppUser(UserDTO user)
         {
+            this._logger.Info("Started HTTP POST Request for Registering User");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -150,8 +167,11 @@ namespace BookStoreBackend.Controllers
             }
             catch(Exception e)
             {
-                throw new Exception(e.Message);
+                this._logger.Error("Exception in AppUserController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP POST Request for Registering User");
 
             return CreatedAtRoute("RegisterAppUserApi", new { id = appUser.UserId }, this._tokenService.CreateToken(appUser.UserId, appUser.UserName, appUser.IsAdmin));
         }
@@ -160,22 +180,27 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(AppUser))]
         public async Task<IHttpActionResult> DeleteAppUser(int id)
         {
+            this._logger.Info("Started HTTP DELETE Request for Deleting User");
+
             AppUser appUser = await db.AppUsers.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
             }
 
-            db.AppUsers.Remove(appUser);
-
             try
             {
+                db.AppUsers.Remove(appUser);
+
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                throw;
+                this._logger.Error("Exception in AppUserController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP DELETE Request for Deleting User");
 
             return Ok(appUser);
         }
@@ -200,6 +225,7 @@ namespace BookStoreBackend.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> AddNewToWishList(int UserId, int BookId)
         {
+            this._logger.Info("Started HTTP PUT Request for Updating User wishlist");
 
             AppUser appUser = await db.AppUsers.FindAsync(UserId);
 
@@ -220,16 +246,19 @@ namespace BookStoreBackend.Controllers
                 return Conflict();
             }
 
-            appUser.Books.Add(book);
-
             try
             {
+                appUser.Books.Add(book);
+            
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                throw;
+                this._logger.Error("Exception in AppUserController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP PUT Request for Updating User wishlist");
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -239,6 +268,7 @@ namespace BookStoreBackend.Controllers
         [HttpDelete]
         public async Task<IHttpActionResult> RemoveFromWishList(int UserId, int BookId)
         {
+            this._logger.Info("Started HTTP DELETE Request for Deleting a book entry in User wishlist");
 
             AppUser appUser = await db.AppUsers.FindAsync(UserId);
 
@@ -249,16 +279,19 @@ namespace BookStoreBackend.Controllers
                 return NotFound();
             }
 
-            appUser.Books.Remove(book);
-
             try
             {
+                appUser.Books.Remove(book);
+            
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                throw;
+                this._logger.Error("Exception in AppUserController : " + e.Message);
+                return InternalServerError(e);
             }
+
+            this._logger.Info("Success in HTTP DELETE Request for Deleting a book entry in User wishlist");
 
             return Ok();
         }

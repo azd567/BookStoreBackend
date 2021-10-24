@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using BookStoreBackend.DTOs;
+using BookStoreBackend.Interfaces;
 using BookStoreBackend.Models;
 
 namespace BookStoreBackend.Controllers
@@ -18,6 +19,13 @@ namespace BookStoreBackend.Controllers
     public class BookOrdersController : ApiController
     {
         private bookstoreDBEntities db = new bookstoreDBEntities();
+
+        private readonly ILoggerService _logger;
+
+        public BookOrdersController(ILoggerService logger)
+        {
+            this._logger = logger;
+        }
 
         // GET: api/BookOrders
         public IQueryable<BookOrderDTO> GetBookOrders()
@@ -124,6 +132,9 @@ namespace BookStoreBackend.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> PostBookOrder(BookListOrderDTO order)
         {
+
+            this._logger.Info("Started HTTP POST Request for Placing an order");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -181,8 +192,11 @@ namespace BookStoreBackend.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
-            }   
+                this._logger.Error("Exception in BookOrdersController : " + e.Message);
+                return InternalServerError(e);
+            }
+
+            this._logger.Info("Success in HTTP POST Request for Placing an order");
 
             return CreatedAtRoute("DefaultApi", new { id = bookOrder.OrderId }, bookOrder.OrderId);
         }
