@@ -28,7 +28,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/Books
         public IQueryable<BookDTO> GetBooks()
         {
-            return BookDTO.SerializeBookList(db.Books.Where(book => book.Status));
+            return BookDTO.SerializeBookList(db.Books);
         }
 
         // GET: api/Books/5

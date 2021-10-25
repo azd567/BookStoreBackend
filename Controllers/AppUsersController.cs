@@ -35,7 +35,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/AppUsers
         public IQueryable<UserDTO> GetAppUsers()
         {
-            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.IsAdmin == false));
+            return UserDTO.SerializeUserList(db.AppUsers);
         }
 
         // GET: api/AppUsers/5
