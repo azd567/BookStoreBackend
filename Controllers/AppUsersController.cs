@@ -51,9 +51,9 @@ namespace BookStoreBackend.Controllers
             return Ok(new UserDTO(appUser));
         }
 
-        // PUT: api/AppUsers
+        // PUT: api/AppUsers/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutAppUser(UserDTO user)
+        public async Task<IHttpActionResult> PutAppUser(int id, UserDTO user)
         {
 
             this._logger.Info("Started HTTP PUT Request for updating User details");
@@ -65,7 +65,12 @@ namespace BookStoreBackend.Controllers
 
             if (user.Id == null)
             {
-                return BadRequest();
+                return BadRequest("No User Id provided");
+            }
+
+            if (id != user.Id.Value)
+            {
+                return BadRequest("URI Dosen't match with perovided id");
             }
 
             if (!AppUserExists(user.Id.Value))

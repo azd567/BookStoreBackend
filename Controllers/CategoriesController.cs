@@ -27,48 +27,26 @@ namespace BookStoreBackend.Controllers
         // GET: api/Categories
         public IQueryable<CategoryDTO> GetCategories()
         {
-            var Categories = from item in db.Categories
-                             select new CategoryDTO
-                             {
-                                 CategoryId = item.CategoryId,
-                                 Name = item.Name,
-                                 CreatedAt = item.CreatedAt,
-                                 Description = item.Description,
-                                 Status = item.Status,
-                                 Image = item.Image,
-                                 Position = item.Position
-                             };
-            return Categories;
+            return CategoryDTO.SerializeCategoryList(db.Categories.Where(category => category.Status));
         }
 
         // GET: api/Categories/5
         [ResponseType(typeof(CategoryDTO))]
         public IHttpActionResult GetCategory(int id)
         {
-            var category = db.Categories.Select(
-                categories => new CategoryDTO()
-                {
-                    CategoryId = categories.CategoryId,
-                    Name = categories.Name,
-                    CreatedAt = categories.CreatedAt,
-                    Description = categories.Description,
-                    Status = categories.Status,
-                    Image = categories.Image,
-                    Position = categories.Position
-
-                }).SingleOrDefault(b=> b.CategoryId== id);
-                
+            var category = db.Categories.Find(id);
+    
             if (category == null)
             {
                 return NotFound();
             }
 
-            return Ok(category);
+            return Ok(new CategoryDTO(category));
         }
 
         // PUT: api/Categories/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCategory(int id, Category category)
+        public IHttpActionResult PutCategory(int id, CategoryDTO cat)
         {
             this._logger.Info("Started HTTP PUT Request for Updating Category");
 
@@ -77,18 +55,31 @@ namespace BookStoreBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != category.CategoryId)
+            if (cat.CategoryId == null)
             {
-                return BadRequest();
+                return BadRequest("No Cateogry Id provided");
             }
 
-            if (!CategoryExists(id))
+            if(id != cat.CategoryId.Value)
+            {
+                return BadRequest("URI Dosen't match with perovided id");
+            }    
+
+            if (!CategoryExists(cat.CategoryId.Value))
             {
                 return NotFound();
             }
 
             try
             {
+                var category = db.Categories.Find(cat.CategoryId.Value);
+
+                category.Name = cat.Name ?? category.Name;
+                category.Description = cat.Description ?? category.Description;
+                category.Status = cat.Status ?? category.Status;
+                category.Image = cat.Image ?? category.Image;
+                category.Position = cat.Position ?? category.Position;
+
                 db.Entry(category).State = EntityState.Modified;
             
                 db.SaveChanges();

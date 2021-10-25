@@ -44,9 +44,9 @@ namespace BookStoreBackend.Controllers
             return Ok(new BookDTO(book));
         }
 
-        // PUT: api/Books
+        // PUT: api/Books/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutBook(BookDTO bk)
+        public async Task<IHttpActionResult> PutBook(int id, BookDTO bk)
         {
             this._logger.Info("Started HTTP PUT Request for Updating Book Details");
 
@@ -57,7 +57,12 @@ namespace BookStoreBackend.Controllers
 
             if (bk.BookId == null)
             {
-                return BadRequest();
+                return BadRequest("No Book Id provided");
+            }
+
+            if (id != bk.BookId.Value)
+            {
+                return BadRequest("URI Dosen't match with perovided id");
             }
 
             if (!BookExists(bk.BookId.Value))

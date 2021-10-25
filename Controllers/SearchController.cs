@@ -48,6 +48,7 @@ namespace BookStoreBackend.Controllers
             return BookDTO.SerializeBookList(db.Books.Where(book => book.ISBN.Contains(number) && book.Status));
         }
 
+        // GET: api/Search/User
         [Route("user")]
         [HttpGet]
         public IQueryable<UserDTO> GetUsersByName(string name)
