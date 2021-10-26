@@ -14,6 +14,7 @@ using BookStoreBackend.DTOs;
 using BookStoreBackend.Interfaces;
 using System.Web.Helpers;
 using NLog;
+using System.Web.Http.Cors;
 
 namespace BookStoreBackend.Controllers
 {
@@ -63,7 +64,7 @@ namespace BookStoreBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (user.Id == null)
+            if (user == null || user.Id == null)
             {
                 return BadRequest("No User Id provided");
             }
@@ -108,7 +109,7 @@ namespace BookStoreBackend.Controllers
         {
             this._logger.Info("Started HTTP POST Request for User login");
 
-            if (user.Name == null)
+            if (user == null || user.Name == null)
                 return BadRequest("No User name provided");
 
             if (!ModelState.IsValid)
@@ -151,7 +152,7 @@ namespace BookStoreBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (user.Name == null || user.IsActive == null || user.IsAdmin == null || user.Password == null)
+            if (user == null || user.Name == null || user.Password == null)
                 return BadRequest("All required fields are not provided");
 
             if ((await db.AppUsers.AnyAsync(appuser => appuser.UserName == user.Name)))
@@ -164,8 +165,8 @@ namespace BookStoreBackend.Controllers
                 appUser.UserName = user.Name;
                 appUser.UserAddress = user.Address;
                 appUser.UserPassword = Crypto.HashPassword(user.Password);
-                appUser.IsActive = user.IsActive.Value;
-                appUser.IsAdmin = user.IsAdmin.Value;
+                appUser.IsActive = user.IsActive == null || user.IsActive.Value;
+                appUser.IsAdmin = user.IsAdmin != null && user.IsAdmin.Value;
 
                 db.AppUsers.Add(appUser);
                 await db.SaveChangesAsync();

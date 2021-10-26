@@ -55,7 +55,7 @@ namespace BookStoreBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (bk.BookId == null)
+            if (bk == null || bk.BookId == null)
             {
                 return BadRequest("No Book Id provided");
             }
@@ -115,7 +115,7 @@ namespace BookStoreBackend.Controllers
                 AuthorName = bk.Author,
                 CategoryId = bk.CategoryId.Value,
                 Image = bk.Image,
-                Status = bk.Status.Value,
+                Status = bk.Status == null || bk.Status.Value,
                 Description = bk.Description,
                 Price = bk.Price.Value,
                 Position = bk.Position.Value,

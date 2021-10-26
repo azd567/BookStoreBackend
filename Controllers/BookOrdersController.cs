@@ -140,7 +140,7 @@ namespace BookStoreBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (order.UserId == null || (await db.AppUsers.FindAsync(order.UserId.Value)).UserAddress == null)
+            if (order == null || order.UserId == null || (await db.AppUsers.FindAsync(order.UserId.Value)).UserAddress == null)
                 return BadRequest("Shipping Address is required");
 
             BookOrder bookOrder = new BookOrder();

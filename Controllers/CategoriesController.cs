@@ -55,7 +55,7 @@ namespace BookStoreBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (cat.CategoryId == null)
+            if (cat == null || cat.CategoryId == null)
             {
                 return BadRequest("No Cateogry Id provided");
             }

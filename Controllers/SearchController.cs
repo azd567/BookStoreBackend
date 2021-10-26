@@ -19,41 +19,41 @@ namespace BookStoreBackend.Controllers
         // GET: api/Search/Category
         [Route("category")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByCategory(string name)
+        public IQueryable<BookDTO> GetBooksByCategory(string data)
         {
-            return BookDTO.SerializeBookList(db.Books.Where(book => book.Category.Name.Contains(name) && book.Status));      
+            return BookDTO.SerializeBookList(db.Books.Where(book => book.Category.Name.Contains(data) && book.Status));      
         }
 
         // GET: api/Search/Author
         [Route("author")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByAuthor(string name)
+        public IQueryable<BookDTO> GetBooksByAuthor(string data)
         {
-            return BookDTO.SerializeBookList(db.Books.Where(book => book.AuthorName.Contains(name) && book.Status));
+            return BookDTO.SerializeBookList(db.Books.Where(book => book.AuthorName.Contains(data) && book.Status));
         }
 
         // GET: api/Search/Title
         [Route("title")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByTitle(string name)
+        public IQueryable<BookDTO> GetBooksByTitle(string data)
         {
-            return BookDTO.SerializeBookList(db.Books.Where(book => book.Title.Contains(name) && book.Status));
+            return BookDTO.SerializeBookList(db.Books.Where(book => book.Title.Contains(data) && book.Status));
         }
 
         // GET: api/Search/ISBN
         [Route("isbn")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByISBN(string number)
+        public IQueryable<BookDTO> GetBooksByISBN(string data)
         {
-            return BookDTO.SerializeBookList(db.Books.Where(book => book.ISBN.Contains(number) && book.Status));
+            return BookDTO.SerializeBookList(db.Books.Where(book => book.ISBN.Contains(data) && book.Status));
         }
 
         // GET: api/Search/User
         [Route("user")]
         [HttpGet]
-        public IQueryable<UserDTO> GetUsersByName(string name)
+        public IQueryable<UserDTO> GetUsersByName(string data)
         {
-            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.UserName.Contains(name) && user.IsAdmin == false));
+            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.UserName.Contains(data) && user.IsAdmin == false));
         }
 
         protected override void Dispose(bool disposing)
