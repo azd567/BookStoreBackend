@@ -34,7 +34,7 @@ namespace BookStoreBackend.Controllers
         public IHttpActionResult GetCoupon(int id)
         {
             Coupon coupon = db.Coupons.Find(id);
-            // Console.WriteLine(coupon);
+           
             if (coupon == null)
             {
                 return NotFound();
@@ -45,6 +45,27 @@ namespace BookStoreBackend.Controllers
                 CouponCode = coupon.CouponCode,
                 Discount = coupon.Discount
             };
+
+            return Ok(cp);
+        }
+
+        // GET: api/Coupons?Code={code}
+        [ResponseType(typeof(CouponDTO))]
+        public IHttpActionResult GetCouponFromCode(string code)
+        {
+            Coupon coupon = db.Coupons.Where(c => c.CouponCode == code).FirstOrDefault();
+    
+            if (coupon == null)
+            {
+                return NotFound();
+            }
+            CouponDTO cp = new CouponDTO
+            {
+                CouponId = coupon.CouponId,
+                CouponCode = coupon.CouponCode,
+                Discount = coupon.Discount
+            };
+
             return Ok(cp);
         }
 
