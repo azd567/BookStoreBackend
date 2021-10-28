@@ -18,6 +18,7 @@ namespace BookStoreBackend.DTOs
     {
         public int? BookId { get; set; }
         public int? Qty { get; set; }
+        public int? ItemPrice { get; set; }
     }
        
 

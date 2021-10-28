@@ -17,6 +17,7 @@ namespace BookStoreBackend.Models
         public int OrderId { get; set; }
         public int BookId { get; set; }
         public int Qty { get; set; }
+        public int ItemPrice { get; set; }
     
         public virtual Book Book { get; set; }
         public virtual BookOrder BookOrder { get; set; }

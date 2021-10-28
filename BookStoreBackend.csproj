@@ -318,15 +318,15 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <EntityDeploy Include="Models\BookStoreModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>BookStoreModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Models\BookStoreModel.edmx.diagram">
       <DependentUpon>BookStoreModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

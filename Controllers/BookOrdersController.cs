@@ -171,7 +171,8 @@ namespace BookStoreBackend.Controllers
                             {
                                 BookId = bookQty.BookId.Value,
                                 OrderId = bookOrder.OrderId,
-                                Qty = bookQty.Qty.Value
+                                Qty = bookQty.Qty.Value,
+                                ItemPrice = bookQty.ItemPrice.Value
                             });
 
                             book.Qty -= bookQty.Qty.Value;
@@ -215,7 +216,7 @@ namespace BookStoreBackend.Controllers
             return Ok(new {
                 order.OrderDate,
                 CouponCode = order.Coupon == null ? "null" : order.Coupon.CouponCode,
-                BookList = order.OrdersBooks.Select(books => new { book = new BookDTO(books.Book), qty = books.Qty })
+                BookList = order.OrdersBooks.Select(books => new { book = new BookDTO(books.Book), qty = books.Qty, itemPrice = books.ItemPrice })
             }); 
         }
 
