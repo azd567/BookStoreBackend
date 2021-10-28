@@ -21,7 +21,7 @@ namespace BookStoreBackend.DTOs
 
         public Nullable<bool> Status { get; set; }
 
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
 
         public Nullable<int> Price { get; set; }
 
@@ -48,7 +48,7 @@ namespace BookStoreBackend.DTOs
             Year = book.Year;
             Description = book.Description;
             Status = book.Status;
-            Image = book.Image;
+            Image = book.Image != null ? Convert.ToBase64String(book.Image, 0, book.Image.Length) : null;
             Price = book.Price;
             Position = book.Position;
             Qty = book.Qty;
@@ -57,9 +57,9 @@ namespace BookStoreBackend.DTOs
             Category = book.Category.Name;
         }
 
-        static public IQueryable<BookDTO> SerializeBookList(IQueryable<Book> bookList)
+        static public IEnumerable<BookDTO> SerializeBookList(IQueryable<Book> bookList)
         {
-            return bookList.Select(book => new BookDTO
+            return bookList.AsEnumerable().Select(book => new BookDTO
             {
                 BookId = book.BookId,
                 Title = book.Title,
@@ -67,7 +67,7 @@ namespace BookStoreBackend.DTOs
                 Year = book.Year,
                 Description = book.Description,
                 Status = book.Status,
-                Image = book.Image,
+                Image = book.Image != null ? Convert.ToBase64String(book.Image, 0, book.Image.Length) : null,
                 Price = book.Price,
                 Position = book.Position,
                 Qty = book.Qty,

@@ -25,7 +25,7 @@ namespace BookStoreBackend.Controllers
         }
 
         // GET: api/Categories
-        public IQueryable<CategoryDTO> GetCategories()
+        public IEnumerable<CategoryDTO> GetCategories()
         {
             return CategoryDTO.SerializeCategoryList(db.Categories);
         }
@@ -77,7 +77,7 @@ namespace BookStoreBackend.Controllers
                 category.Name = cat.Name ?? category.Name;
                 category.Description = cat.Description ?? category.Description;
                 category.Status = cat.Status ?? category.Status;
-                category.Image = cat.Image ?? category.Image;
+                category.Image = cat.Image != null ? Convert.FromBase64String(cat.Image) : category.Image;
                 category.Position = cat.Position ?? category.Position;
 
                 db.Entry(category).State = EntityState.Modified;
@@ -97,7 +97,7 @@ namespace BookStoreBackend.Controllers
 
         // POST: api/Categories
         [ResponseType(typeof(Category))]
-        public IHttpActionResult PostCategory(Category category)
+        public IHttpActionResult PostCategory(CategoryDTO cat)
         {
             this._logger.Info("Started HTTP POST Request for Adding Category");
 
@@ -106,6 +106,15 @@ namespace BookStoreBackend.Controllers
                 return BadRequest(ModelState);
             }
 
+            Category category = new Category{
+                Name = cat.Name,
+                CreatedAt = cat.CreatedAt,
+                Description = cat.Description,
+                Status = cat.Status == null || cat.Status.Value,
+                Image = cat.Image != null ? Convert.FromBase64String(cat.Image) : null,
+                Position = cat.Position.Value
+            };
+                
             try
             {
                 db.Categories.Add(category);

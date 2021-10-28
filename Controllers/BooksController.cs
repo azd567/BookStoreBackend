@@ -26,7 +26,7 @@ namespace BookStoreBackend.Controllers
         }
 
         // GET: api/Books
-        public IQueryable<BookDTO> GetBooks()
+        public IEnumerable<BookDTO> GetBooks()
         {
             return BookDTO.SerializeBookList(db.Books);
         }
@@ -77,7 +77,7 @@ namespace BookStoreBackend.Controllers
                 book.Title = bk.Title ?? book.Title;
                 book.Featured = bk.Featured ?? book.Featured;
                 book.Description = bk.Description ?? book.Description;
-                book.Image = bk.Image ?? book.Image;
+                book.Image = bk.Image != null ? Convert.FromBase64String(bk.Image) : book.Image;
                 book.Status = bk.Status ?? book.Status;
                 book.Qty = bk.Qty ?? book.Qty;
                 book.Price = bk.Price ?? book.Price;
@@ -114,7 +114,7 @@ namespace BookStoreBackend.Controllers
                 ISBN = bk.ISBN,
                 AuthorName = bk.Author,
                 CategoryId = bk.CategoryId.Value,
-                Image = bk.Image,
+                Image =  bk.Image != null ? Convert.FromBase64String(bk.Image) : null,
                 Status = bk.Status == null || bk.Status.Value,
                 Description = bk.Description,
                 Price = bk.Price.Value,

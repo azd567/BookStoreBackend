@@ -19,7 +19,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/Search/Category
         [Route("category")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByCategory(string data)
+        public IEnumerable<BookDTO> GetBooksByCategory(string data)
         {
             return BookDTO.SerializeBookList(db.Books.Where(book => book.Category.Name.Contains(data) && book.Status));      
         }
@@ -27,7 +27,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/Search/Author
         [Route("author")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByAuthor(string data)
+        public IEnumerable<BookDTO> GetBooksByAuthor(string data)
         {
             return BookDTO.SerializeBookList(db.Books.Where(book => book.AuthorName.Contains(data) && book.Status));
         }
@@ -35,7 +35,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/Search/Title
         [Route("title")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByTitle(string data)
+        public IEnumerable<BookDTO> GetBooksByTitle(string data)
         {
             return BookDTO.SerializeBookList(db.Books.Where(book => book.Title.Contains(data) && book.Status));
         }
@@ -43,7 +43,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/Search/ISBN
         [Route("isbn")]
         [HttpGet]
-        public IQueryable<BookDTO> GetBooksByISBN(string data)
+        public IEnumerable<BookDTO> GetBooksByISBN(string data)
         {
             return BookDTO.SerializeBookList(db.Books.Where(book => book.ISBN.Contains(data) && book.Status));
         }

@@ -13,7 +13,7 @@ namespace BookStoreBackend.DTOs
         public System.DateTime CreatedAt { get; set; }
         public string Description { get; set; }
         public bool? Status { get; set; }
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
         public int? Position { get; set; }
 
         public CategoryDTO()
@@ -27,20 +27,21 @@ namespace BookStoreBackend.DTOs
             CreatedAt = category.CreatedAt;
             Description = category.Description;
             Status = category.Status;
-            Image = category.Image;
+            Image = category.Image != null ? Convert.ToBase64String(category.Image, 0, category.Image.Length) : null;
             Position = category.Position;            
         }
 
-        static public IQueryable<CategoryDTO> SerializeCategoryList(IQueryable<Category> categoryList)
+        static public IEnumerable<CategoryDTO> SerializeCategoryList(IQueryable<Category> categoryList)
         {
-            return categoryList.Select(category => new CategoryDTO
+           
+           return categoryList.AsEnumerable().Select(category => new CategoryDTO
             {
                 CategoryId = category.CategoryId,
                 Name = category.Name,
                 CreatedAt = category.CreatedAt,
                 Description = category.Description,
                 Status = category.Status,
-                Image = category.Image,
+                Image = category.Image != null ? Convert.ToBase64String(category.Image, 0, category.Image.Length) : null,
                 Position = category.Position,
             });
         }
