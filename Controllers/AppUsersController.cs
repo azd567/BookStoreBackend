@@ -40,6 +40,14 @@ namespace BookStoreBackend.Controllers
             return UserDTO.SerializeUserList(db.AppUsers);
         }
 
+        // GET: api/AppUsers/users
+        [Authorize(Roles = "Admin")]
+        [Route("users")]
+        public IQueryable<UserDTO> GetNonAdminAppUsers()
+        {
+            return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.IsAdmin == false));
+        }
+
         // GET: api/AppUsers/5
         [ResponseType(typeof(UserDTO))]
         [Authorize]
