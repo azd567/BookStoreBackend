@@ -51,6 +51,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/Search/User
         [Route("user")]
         [HttpGet]
+        [Authorize]
         public IQueryable<UserDTO> GetUsersByName(string data)
         {
             return UserDTO.SerializeUserList(db.AppUsers.Where(user => user.UserName.Contains(data) && user.IsAdmin == false));

@@ -34,6 +34,7 @@ namespace BookStoreBackend.Controllers
         }
 
         // GET: api/AppUsers
+        [Authorize(Roles = "Admin")]
         public IQueryable<UserDTO> GetAppUsers()
         {
             return UserDTO.SerializeUserList(db.AppUsers);
@@ -41,6 +42,7 @@ namespace BookStoreBackend.Controllers
 
         // GET: api/AppUsers/5
         [ResponseType(typeof(UserDTO))]
+        [Authorize]
         public async Task<IHttpActionResult> GetAppUser(int id)
         {
             AppUser appUser = await db.AppUsers.FindAsync(id);
@@ -54,6 +56,7 @@ namespace BookStoreBackend.Controllers
 
         // PUT: api/AppUsers/5
         [ResponseType(typeof(void))]
+        [Authorize]
         public async Task<IHttpActionResult> PutAppUser(int id, UserDTO user)
         {
 
@@ -184,6 +187,7 @@ namespace BookStoreBackend.Controllers
 
         // DELETE: api/AppUsers/5
         [ResponseType(typeof(AppUser))]
+        [Authorize(Roles = "Admin")]
         public async Task<IHttpActionResult> DeleteAppUser(int id)
         {
             this._logger.Info("Started HTTP DELETE Request for Deleting User");
@@ -228,6 +232,7 @@ namespace BookStoreBackend.Controllers
         // PUT: api/AppUsers/WishList?UserId={UserId}&BookId={BookId}
         [Route("wishlist")]
         [HttpPut]
+        [Authorize]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> AddNewToWishList(int UserId, int BookId)
         {
@@ -272,6 +277,7 @@ namespace BookStoreBackend.Controllers
         // DELETE: api/AppUsers/WishList?UserId={UserId}&BookId={BookId}
         [Route("wishlist")]
         [HttpDelete]
+        [Authorize]
         public async Task<IHttpActionResult> RemoveFromWishList(int UserId, int BookId)
         {
             this._logger.Info("Started HTTP DELETE Request for Deleting a book entry in User wishlist");
@@ -306,6 +312,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/AppUsers/Orders?id={id}
         [Route("orders")]
         [HttpGet]
+        [Authorize]
         public async Task<IHttpActionResult> GetOrders(int id)
         {
             AppUser appUser = await db.AppUsers.FindAsync(id);

@@ -46,6 +46,7 @@ namespace BookStoreBackend.Controllers
 
         // PUT: api/Categories/5
         [ResponseType(typeof(void))]
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult PutCategory(int id, CategoryDTO cat)
         {
             this._logger.Info("Started HTTP PUT Request for Updating Category");
@@ -97,6 +98,7 @@ namespace BookStoreBackend.Controllers
 
         // POST: api/Categories
         [ResponseType(typeof(Category))]
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult PostCategory(CategoryDTO cat)
         {
             this._logger.Info("Started HTTP POST Request for Adding Category");
@@ -133,6 +135,7 @@ namespace BookStoreBackend.Controllers
 
         // DELETE: api/Categories/5
         [ResponseType(typeof(Category))]
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult DeleteCategory(int id)
         {
             this._logger.Info("Started HTTP DELETE  Request for Deleting Category");

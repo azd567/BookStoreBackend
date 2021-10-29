@@ -28,6 +28,7 @@ namespace BookStoreBackend.Controllers
         }
 
         // GET: api/BookOrders
+        [Authorize]
         public IQueryable<BookOrderDTO> GetBookOrders()
         {
             return db.BookOrders.Select(
@@ -43,6 +44,7 @@ namespace BookStoreBackend.Controllers
 
         // GET: api/BookOrders/5
         [ResponseType(typeof(BookOrderDTO))]
+        [Authorize]
         public IHttpActionResult GetBookOrder(int id)
         {
             BookOrder bookOrder = db.BookOrders.Find(id);
@@ -130,6 +132,7 @@ namespace BookStoreBackend.Controllers
 
         // POST: api/BookOrders/
         [HttpPost]
+        [Authorize]
         public async Task<IHttpActionResult> PostBookOrder(BookListOrderDTO order)
         {
 
@@ -205,6 +208,7 @@ namespace BookStoreBackend.Controllers
         // GET: api/BookOrders/OrderDetails?id={id}
         [Route("orderdetails")]
         [HttpGet]
+        [Authorize]
         public async Task<IHttpActionResult> GetOrderDetails(int id)
         {
             BookOrder order = await db.BookOrders.FindAsync(id);

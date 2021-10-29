@@ -46,6 +46,7 @@ namespace BookStoreBackend.Controllers
 
         // PUT: api/Books/5
         [ResponseType(typeof(void))]
+        [Authorize(Roles = "Admin")]
         public async Task<IHttpActionResult> PutBook(int id, BookDTO bk)
         {
             this._logger.Info("Started HTTP PUT Request for Updating Book Details");
@@ -99,6 +100,7 @@ namespace BookStoreBackend.Controllers
         }
 
         // POST: api/Books
+        [Authorize(Roles = "Admin")]
         public async Task<IHttpActionResult> PostBook(BookDTO bk)
         {
             this._logger.Info("Started HTTP POST Request for Adding Book");
@@ -143,6 +145,7 @@ namespace BookStoreBackend.Controllers
 
         // DELETE: api/Books/5
         [ResponseType(typeof(Book))]
+        [Authorize(Roles = "Admin")]
         public async Task<IHttpActionResult> DeleteBook(int id)
         {
             this._logger.Info("Started HTTP DELETE Request for deleting Book");

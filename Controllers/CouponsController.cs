@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using BookStoreBackend.DTOs;
+using BookStoreBackend.Interfaces;
 using BookStoreBackend.Models;
 
 namespace BookStoreBackend.Controllers
@@ -15,6 +16,12 @@ namespace BookStoreBackend.Controllers
     public class CouponsController : ApiController
     {
         private bookstoreDBEntities db = new bookstoreDBEntities();
+        private readonly ILoggerService _logger;
+
+        public CouponsController(ILoggerService logger)
+        {
+            this._logger = logger;
+        }
 
         // GET: api/Coupons
         public IQueryable<CouponDTO> GetCoupons()
@@ -71,6 +78,7 @@ namespace BookStoreBackend.Controllers
 
         // PUT: api/Coupons/5
         [ResponseType(typeof(void))]
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult PutCoupon(int id, Coupon coupon)
         {
             if (!ModelState.IsValid)
@@ -106,31 +114,65 @@ namespace BookStoreBackend.Controllers
 
         // POST: api/Coupons
         [ResponseType(typeof(Coupon))]
-        public IHttpActionResult PostCoupon(Coupon coupon)
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult PostCoupon(CouponDTO coup)
         {
+            this._logger.Info("Started HTTP POST Request for Adding Coupon");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Coupons.Add(coupon);
-            db.SaveChanges();
+            Coupon coupon = new Coupon
+            {
+                CouponCode = coup.CouponCode,
+                Discount = coup.Discount
+            };
+
+            try
+            {
+                db.Coupons.Add(coupon);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                this._logger.Error("Exception in CouponsController : " + e.Message);
+                return InternalServerError(e);
+            }
+
+            this._logger.Info("Success HTTP POST Request for Adding Coupon");
 
             return CreatedAtRoute("DefaultApi", new { id = coupon.CouponId }, coupon);
         }
-        // x
+        
         // DELETE: api/Coupons/5
         [ResponseType(typeof(Coupon))]
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult DeleteCoupon(int id)
         {
+            this._logger.Info("Starting HTTP DELETE Request for Deleting Coupon");
+
             Coupon coupon = db.Coupons.Find(id);
+
             if (coupon == null)
             {
                 return NotFound();
             }
 
-            db.Coupons.Remove(coupon);
-            db.SaveChanges();
+            try
+            {
+                db.Coupons.Remove(coupon);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                this._logger.Error("Exception in CouponsController : " + e.Message);
+                return InternalServerError(e);
+            }
+
+            this._logger.Info("Success HTTP DELETE Request for Deleting Coupon");
 
             return Ok(coupon);
         }
