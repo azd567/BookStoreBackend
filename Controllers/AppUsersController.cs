@@ -332,40 +332,6 @@ namespace BookStoreBackend.Controllers
             return Ok(appUser.BookOrders.Select(order => new { order.OrderId, order.OrderDate }).AsQueryable());
         }
 
-        // DELETE THIS WHEN NO LONGER REQUIRED
-        // **********************************************
-
-        //[Route("test")]
-        //[HttpGet]
-        //public async Task<dynamic> Gettest(int id)
-        //{
-        //    AppUser appUser = await db.AppUsers.FindAsync(id);
-        //    if (appUser == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    return this._tokenService.CreateToken(appUser.UserId, appUser.UserName, appUser.IsAdmin);
-        //}
-
-        //[Route("test2")]
-        //[HttpGet]
-        //[Authorize]
-        //public string Gettest2()
-        //{
-        //    return "User allowed";
-        //}
-
-        //[Route("test3")]
-        //[HttpGet]
-        //[Authorize(Roles = "Admin")]
-        //public string Gettest3()
-        //{
-        //    return "Admin allowed";
-        //}
-
-        // *************************************************
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
